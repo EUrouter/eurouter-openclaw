@@ -61,6 +61,7 @@ export default {
               models: STATIC_MODELS.map((m) => ({
                 ...m,
                 input: m.input.filter((i) => i === "text" || i === "image"),
+                headers: ATTRIBUTION_HEADERS,
               })).filter((m) => m.input.length > 0),
             },
           };
@@ -82,6 +83,7 @@ export default {
           cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
           contextWindow: 128_000,
           maxTokens: 8192,
+          headers: ATTRIBUTION_HEADERS,
         };
       },
 
@@ -94,16 +96,6 @@ export default {
         }
       },
 
-      wrapStreamFn: (ctx: any) => {
-        const inner = ctx.streamFn;
-        return async (params: any) => {
-          params.headers = {
-            ...params.headers,
-            ...ATTRIBUTION_HEADERS,
-          };
-          return inner(params);
-        };
-      },
     });
   },
 };
