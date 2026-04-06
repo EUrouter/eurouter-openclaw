@@ -12,7 +12,7 @@
       "method": "api-key",
       "choiceId": "eurouter-api-key",
       "choiceLabel": "EUrouter API Key",
-      "choiceHint": "Get your API key at https://eurouter.eu (starts with eur_)",
+      "choiceHint": "Get your API key at https://eurouter.ai (starts with eur_)",
       "groupId": "eurouter",
       "groupLabel": "EUrouter",
       "optionKey": "eurouterApiKey",
