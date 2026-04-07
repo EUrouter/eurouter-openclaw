@@ -92,7 +92,7 @@ export default {
         const baseUrl = config.baseUrl || DEFAULT_BASE_URL;
         const resolved = await resolveDynamicModel(baseUrl, ctx.modelId);
         if (resolved) {
-          ctx.dynamicModelData = resolved;
+          ctx.dynamicModelData = { ...resolved, headers: ATTRIBUTION_HEADERS };
         }
       },
 

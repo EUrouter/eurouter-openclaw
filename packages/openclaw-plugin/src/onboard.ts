@@ -2,7 +2,7 @@
  * Onboarding helper for EUrouter provider configuration.
  */
 
-const DEFAULT_BASE_URL = "https://api.eurouter.ai/api/v1";
+import { DEFAULT_BASE_URL } from "./index.js";
 
 export interface EurouterConfig {
   baseUrl?: string;
