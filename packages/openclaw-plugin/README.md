@@ -47,7 +47,7 @@ The plugin ships with 98 chat models from OpenAI, Anthropic, Mistral, Meta, Deep
 
 ### "model not allowed: eurouter/..."
 
-A fresh OpenClaw install has `agents.defaults.models` set, which acts as an allowlist. Add `eurouter/*` to the list, or remove the `agents.defaults.models` key entirely from `openclaw.json` to allow all models.
+A fresh OpenClaw install has `agents.defaults.models` set, which acts as an allowlist. Add `eurouter/*` to the list in `openclaw.json` to permit EUrouter models.
 
 ### Messages silently dropped / model warmup fails
 
