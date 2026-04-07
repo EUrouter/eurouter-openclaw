@@ -50,12 +50,9 @@ export default {
           const apiKey = ctx.resolveProviderApiKey(PROVIDER_ID)?.apiKey;
           if (!apiKey) return null;
 
-          const config = ctx.pluginConfig ?? {};
-          const baseUrl = config.baseUrl || DEFAULT_BASE_URL;
-
           return {
             provider: {
-              baseUrl,
+              baseUrl: DEFAULT_BASE_URL,
               apiKey,
               api: TRANSPORT_API,
               models: STATIC_MODELS.map((m) => ({
@@ -68,34 +65,29 @@ export default {
         },
       },
 
-      resolveDynamicModel: (ctx: any) => {
-        const config = ctx.pluginConfig ?? {};
-        const baseUrl = config.baseUrl || DEFAULT_BASE_URL;
-
-        return {
-          id: ctx.modelId,
-          name: ctx.modelId,
-          provider: PROVIDER_ID,
-          api: TRANSPORT_API,
-          baseUrl,
-          reasoning: false,
-          input: ["text"],
-          cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-          contextWindow: 128_000,
-          maxTokens: 8192,
-          headers: ATTRIBUTION_HEADERS,
-        };
-      },
+      resolveDynamicModel: (ctx: any) => ({
+        id: ctx.modelId,
+        name: ctx.modelId,
+        provider: PROVIDER_ID,
+        api: TRANSPORT_API,
+        baseUrl: DEFAULT_BASE_URL,
+        reasoning: false,
+        input: ["text"],
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+        contextWindow: 128_000,
+        maxTokens: 8192,
+        headers: ATTRIBUTION_HEADERS,
+      }),
 
       prepareDynamicModel: async (ctx: any) => {
-        const config = ctx.pluginConfig ?? {};
-        const baseUrl = config.baseUrl || DEFAULT_BASE_URL;
-        const resolved = await resolveDynamicModel(baseUrl, ctx.modelId);
+        const resolved = await resolveDynamicModel(
+          DEFAULT_BASE_URL,
+          ctx.modelId
+        );
         if (resolved) {
           ctx.dynamicModelData = resolved;
         }
       },
-
     });
   },
 };

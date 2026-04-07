@@ -13,8 +13,6 @@ export {
   type OpenClawModel,
 } from "./provider-catalog.js";
 
-export { applyEurouterConfig, type EurouterConfig } from "./onboard.js";
-
 export {
   PROVIDER_ID,
   DEFAULT_BASE_URL,
