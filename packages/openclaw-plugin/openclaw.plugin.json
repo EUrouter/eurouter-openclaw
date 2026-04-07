@@ -3,8 +3,6 @@
   "name": "EUrouter",
   "description": "EU-hosted, GDPR-compliant LLM routing via EUrouter",
   "providers": ["eurouter"],
-  "requiredEnvVars": ["EUROUTER_API_KEY"],
-  "primaryCredential": "EUROUTER_API_KEY",
   "providerAuthEnvVars": {
     "eurouter": ["EUROUTER_API_KEY"]
   },
@@ -17,6 +15,7 @@
       "choiceHint": "Get your API key at https://eurouter.ai (starts with eur_)",
       "groupId": "eurouter",
       "groupLabel": "EUrouter",
+      "groupHint": "API key",
       "optionKey": "eurouterApiKey",
       "cliFlag": "--eurouter-api-key",
       "cliOption": "--eurouter-api-key <key>",

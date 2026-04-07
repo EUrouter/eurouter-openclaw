@@ -10,6 +10,8 @@ openclaw plugins install @eurouter/openclaw-eurouter
 
 ## Configuration
 
+This plugin requires one credential: `EUROUTER_API_KEY`.
+
 Get your API key at [eurouter.ai](https://eurouter.ai), then configure it using the OpenClaw secrets store:
 
 ```bash
@@ -47,7 +49,7 @@ The plugin ships with 98 chat models from OpenAI, Anthropic, Mistral, Meta, Deep
 
 ### "model not allowed: eurouter/..."
 
-A fresh OpenClaw install has `agents.defaults.models` set, which acts as an allowlist. Add `eurouter/*` to the list in `openclaw.json` to permit EUrouter models.
+A fresh OpenClaw install has `agents.defaults.models` set, which acts as an allowlist. Keep that allowlist in place and add either `eurouter/*` or the exact EUrouter models you want to permit.
 
 ### Messages silently dropped / model warmup fails
 

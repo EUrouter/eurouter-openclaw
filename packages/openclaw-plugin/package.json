@@ -28,8 +28,6 @@
   "openclaw": {
     "extensions": ["./dist/index.js"],
     "providers": ["eurouter"],
-    "requiredEnvVars": ["EUROUTER_API_KEY"],
-    "primaryCredential": "EUROUTER_API_KEY",
     "compat": {
       "pluginApi": ">=2026.3.24-beta.2"
     },
