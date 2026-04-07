@@ -5,6 +5,8 @@
  * EU data residency and GDPR compliance.
  */
 
+import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth";
 import {
   fetchAllModels,
   resolveDynamicModel,
@@ -30,23 +32,28 @@ export const ATTRIBUTION_HEADERS: Record<string, string> = {
 // Plugin entry
 // ---------------------------------------------------------------------------
 
-export default {
+export default definePluginEntry({
   id: PROVIDER_ID,
   name: "EUrouter",
   description: "EU-hosted, GDPR-compliant LLM routing via EUrouter",
 
-  register(api: any) {
+  register(api) {
     api.registerProvider({
       id: PROVIDER_ID,
       label: "EUrouter",
       envVars: ["EUROUTER_API_KEY"],
       auth: [
-        {
-          id: "api-key",
-          kind: "api_key",
+        createProviderApiKeyAuthMethod({
+          providerId: PROVIDER_ID,
+          methodId: "api-key",
           label: "EUrouter API Key",
-          hint: "API key (starts with eur_)",
-        },
+          hint: "Get your API key at https://eurouter.ai (starts with eur_)",
+          optionKey: "eurouterApiKey",
+          flagName: "--eurouter-api-key",
+          envVar: "EUROUTER_API_KEY",
+          promptMessage: "Enter your EUrouter API key",
+          defaultModel: "eurouter/claude-sonnet-4-6",
+        }),
       ],
       catalog: {
         order: "simple" as const,
@@ -71,22 +78,19 @@ export default {
         },
       },
 
-      resolveDynamicModel: async (ctx: any) => {
-        const bareId = stripProviderPrefix(ctx.modelId);
-        const resolved = await resolveDynamicModel(DEFAULT_BASE_URL, bareId);
-
-        if (resolved) {
+      resolveDynamicModel: (ctx: any) => {
+        // After prepareDynamicModel, ctx.dynamicModelData is populated
+        if (ctx.dynamicModelData) {
           return {
-            ...resolved,
+            ...ctx.dynamicModelData,
             id: ctx.modelId,
             provider: PROVIDER_ID,
             api: TRANSPORT_API,
             baseUrl: DEFAULT_BASE_URL,
-            headers: ATTRIBUTION_HEADERS,
           };
         }
 
-        // Fallback stub for models not yet in the catalog
+        // First pass (before prepareDynamicModel): return a fallback stub
         return {
           id: ctx.modelId,
           name: ctx.modelId,
@@ -114,4 +118,4 @@ export default {
       },
     });
   },
-};
+});
