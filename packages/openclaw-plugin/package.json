@@ -1,11 +1,12 @@
 {
   "name": "@eurouter/openclaw-eurouter",
-  "version": "0.1.5",
+  "version": "0.1.6",
+  "displayName": "EUrouter",
   "description": "EUrouter provider plugin for OpenClaw — EU-hosted, GDPR-compliant LLM routing",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "openclaw.plugin.json", "README.md", "LICENSE"],
+  "files": ["dist", "openclaw.plugin.json", "README.md", "SKILL.md", "LICENSE"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -24,7 +25,7 @@
     "typecheck": "tsc --noEmit",
     "update-models": "npx tsx scripts/update-static-models.ts"
   },
-  "homepage": "https://github.com/EUrouter/eurouter-openclaw",
+  "homepage": "https://github.com/EUrouter/eurouter-openclaw/tree/main/packages/openclaw-plugin",
   "openclaw": {
     "extensions": ["./dist/index.js"],
     "providers": ["eurouter"],
@@ -49,6 +50,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EUrouter/eurouter-openclaw.git"
+    "url": "https://github.com/EUrouter/eurouter-openclaw.git",
+    "directory": "packages/openclaw-plugin"
   }
 }

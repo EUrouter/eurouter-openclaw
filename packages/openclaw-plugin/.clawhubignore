@@ -1,0 +1,9 @@
+.clawhubignore
+.gitignore
+package-lock.json
+scripts/
+src/
+tests/
+tsconfig.json
+*.tgz
+dist/*.map
