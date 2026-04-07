@@ -36,22 +36,6 @@ All requests are routed through EUrouter's EU-based infrastructure, ensuring GDP
 
 The plugin ships with 98 chat models from OpenAI, Anthropic, Mistral, Meta, DeepSeek, Google, Qwen, and more. Any model available on EUrouter can also be used by specifying its full ID — the plugin dynamically resolves models not in the static catalog.
 
-## Custom base URL
-
-For self-hosted EUrouter instances, set the `baseUrl` in your OpenClaw plugin config:
-
-```json
-{
-  "plugins": {
-    "entries": {
-      "eurouter": {
-        "baseUrl": "https://your-instance.example.com/api/v1"
-      }
-    }
-  }
-}
-```
-
 ## Why EUrouter?
 
 - All LLM traffic stays within the EU

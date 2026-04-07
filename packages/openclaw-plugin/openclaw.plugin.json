@@ -24,19 +24,6 @@
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
-    "properties": {
-      "baseUrl": {
-        "type": "string",
-        "description": "Custom base URL for self-hosted EUrouter instances"
-      }
-    }
-  },
-  "uiHints": {
-    "baseUrl": {
-      "label": "Base URL",
-      "help": "Override for self-hosted EUrouter instances",
-      "placeholder": "https://api.eurouter.ai/api/v1",
-      "advanced": true
-    }
+    "properties": {}
   }
 }
