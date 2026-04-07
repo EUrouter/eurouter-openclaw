@@ -85,7 +85,7 @@ export default {
           ctx.modelId
         );
         if (resolved) {
-          ctx.dynamicModelData = resolved;
+          ctx.dynamicModelData = { ...resolved, headers: ATTRIBUTION_HEADERS };
         }
       },
     });

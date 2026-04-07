@@ -5,12 +5,23 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "openclaw.plugin.json", "README.md"],
+  "files": ["dist", "openclaw.plugin.json", "README.md", "LICENSE"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./api": {
+      "types": "./dist/api.d.ts",
+      "default": "./dist/api.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "update-models": "npx tsx scripts/update-static-models.ts"
   },
   "openclaw": {
     "extensions": ["./dist/index.js"],
@@ -35,6 +46,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/eurouter/openclaw-eurouter"
+    "url": "https://github.com/EUrouter/eurouter-openclaw.git"
   }
 }
