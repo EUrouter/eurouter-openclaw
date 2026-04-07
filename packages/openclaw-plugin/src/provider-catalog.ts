@@ -62,6 +62,19 @@ export interface OpenClawModel {
 }
 
 // ---------------------------------------------------------------------------
+// Provider prefix handling
+// ---------------------------------------------------------------------------
+
+/**
+ * Strip the "eurouter/" provider prefix from a model ID.
+ * OpenClaw passes model IDs as "eurouter/gpt-4o" but the EUrouter API
+ * only knows bare IDs like "gpt-4o".
+ */
+export function stripProviderPrefix(modelId: string): string {
+  return modelId.replace(/^eurouter\//, "");
+}
+
+// ---------------------------------------------------------------------------
 // Cost conversion
 // ---------------------------------------------------------------------------
 
@@ -182,6 +195,7 @@ export async function resolveDynamicModel(
   baseUrl: string,
   modelId: string
 ): Promise<OpenClawModel | undefined> {
+  const bareId = stripProviderPrefix(modelId);
   const models = await fetchAllModels(baseUrl);
-  return models.find((m) => m.id === modelId);
+  return models.find((m) => m.id === bareId);
 }

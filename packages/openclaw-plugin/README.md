@@ -10,13 +10,13 @@ openclaw plugins install @eurouter/openclaw-eurouter
 
 ## Configuration
 
-Set your EUrouter API key as an environment variable:
+Get your API key at [eurouter.ai](https://eurouter.ai), then configure it using the OpenClaw secrets store:
 
 ```bash
-export EUROUTER_API_KEY=eur_your_key_here
+openclaw secrets set EUROUTER_API_KEY eur_your_key_here
 ```
 
-Get your API key at [eurouter.ai](https://eurouter.ai).
+> **Note:** On macOS, the OpenClaw gateway runs as a LaunchAgent (background service) and does not inherit shell environment variables. Using `export EUROUTER_API_KEY=...` in your shell profile will **not** work. Always use `openclaw secrets set` or add the key to your `auth-profiles.json`.
 
 ## Usage
 
@@ -42,3 +42,17 @@ The plugin ships with 98 chat models from OpenAI, Anthropic, Mistral, Meta, Deep
 - Full GDPR compliance for AI workloads
 - OpenAI-compatible API — works with any model
 - No vendor lock-in: switch models without code changes
+
+## Troubleshooting
+
+### "model not allowed: eurouter/..."
+
+A fresh OpenClaw install has `agents.defaults.models` set, which acts as an allowlist. Add `eurouter/*` to the list, or remove the `agents.defaults.models` key entirely from `openclaw.json` to allow all models.
+
+### Messages silently dropped / model warmup fails
+
+If your configured model is unavailable, the gateway may fail silently during warmup. Check `openclaw logs` for errors. Try switching to a known-working model (e.g. `eurouter/gpt-4o`) to verify your API key and connection.
+
+### API key not working
+
+Verify your key starts with `eur_` and was set via `openclaw secrets set` (not a shell export). Run `openclaw secrets list` to confirm the key is stored.

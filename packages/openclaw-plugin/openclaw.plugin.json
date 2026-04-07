@@ -18,9 +18,17 @@
       "optionKey": "eurouterApiKey",
       "cliFlag": "--eurouter-api-key",
       "cliOption": "--eurouter-api-key <key>",
-      "cliDescription": "EUrouter API key for EU-hosted LLM routing"
+      "cliDescription": "EUrouter API key for EU-hosted LLM routing",
+      "onboardingScopes": ["text-inference"]
     }
   ],
+  "uiHints": {
+    "apiKey": {
+      "label": "API key",
+      "placeholder": "eur_...",
+      "sensitive": true
+    }
+  },
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
