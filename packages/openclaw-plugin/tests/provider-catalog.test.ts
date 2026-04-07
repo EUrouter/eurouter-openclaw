@@ -6,6 +6,7 @@ import {
   fetchAllModels,
   resolveDynamicModel,
   clearModelCache,
+  stripProviderPrefix,
   type EurouterModel,
 } from "../src/provider-catalog.js";
 
@@ -384,5 +385,35 @@ describe("resolveDynamicModel", () => {
   it("returns undefined for an unknown model id", async () => {
     const result = await resolveDynamicModel(BASE_URL, "nonexistent");
     expect(result).toBeUndefined();
+  });
+
+  it("resolves a model when given a provider-prefixed id (bug 1.1)", async () => {
+    const result = await resolveDynamicModel(BASE_URL, "eurouter/gpt-4o");
+    expect(result).toBeDefined();
+    expect(result!.id).toBe("gpt-4o");
+    expect(result!.cost.input).toBe(2.5);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 7. stripProviderPrefix
+// ---------------------------------------------------------------------------
+describe("stripProviderPrefix", () => {
+  it('strips the "eurouter/" prefix from a model id', () => {
+    expect(stripProviderPrefix("eurouter/gpt-4o")).toBe("gpt-4o");
+  });
+
+  it("returns bare model ids unchanged", () => {
+    expect(stripProviderPrefix("gpt-4o")).toBe("gpt-4o");
+  });
+
+  it("only strips the leading eurouter/ prefix", () => {
+    expect(stripProviderPrefix("other/eurouter/model")).toBe(
+      "other/eurouter/model"
+    );
+  });
+
+  it("handles model ids with nested slashes", () => {
+    expect(stripProviderPrefix("eurouter/minimax-m2.5")).toBe("minimax-m2.5");
   });
 });

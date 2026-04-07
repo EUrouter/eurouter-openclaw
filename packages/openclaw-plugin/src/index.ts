@@ -5,7 +5,11 @@
  * EU data residency and GDPR compliance.
  */
 
-import { resolveDynamicModel } from "./provider-catalog.js";
+import {
+  fetchAllModels,
+  resolveDynamicModel,
+  stripProviderPrefix,
+} from "./provider-catalog.js";
 import { STATIC_MODELS } from "./static-models.js";
 
 // ---------------------------------------------------------------------------
@@ -46,47 +50,67 @@ export default {
       ],
       catalog: {
         order: "simple" as const,
-        run: (ctx: any) => {
+        run: async (ctx: any) => {
           const apiKey = ctx.resolveProviderApiKey(PROVIDER_ID)?.apiKey;
           if (!apiKey) return null;
 
+          const config = ctx.pluginConfig ?? {};
+          const baseUrl = config.baseUrl || DEFAULT_BASE_URL;
+          const liveModels = await fetchAllModels(baseUrl);
+          const models = (liveModels.length > 0 ? liveModels : STATIC_MODELS)
+            .map((m) => ({
+              ...m,
+              input: m.input.filter((i) => i === "text" || i === "image"),
+              headers: ATTRIBUTION_HEADERS,
+            }))
+            .filter((m) => m.input.length > 0);
+
           return {
-            provider: {
-              baseUrl: DEFAULT_BASE_URL,
-              apiKey,
-              api: TRANSPORT_API,
-              models: STATIC_MODELS.map((m) => ({
-                ...m,
-                input: m.input.filter((i) => i === "text" || i === "image"),
-                headers: ATTRIBUTION_HEADERS,
-              })).filter((m) => m.input.length > 0),
-            },
+            provider: { baseUrl, apiKey, api: TRANSPORT_API, models },
           };
         },
       },
 
-      resolveDynamicModel: (ctx: any) => ({
-        id: ctx.modelId,
-        name: ctx.modelId,
-        provider: PROVIDER_ID,
-        api: TRANSPORT_API,
-        baseUrl: DEFAULT_BASE_URL,
-        reasoning: false,
-        input: ["text"],
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-        contextWindow: 128_000,
-        maxTokens: 8192,
-        headers: ATTRIBUTION_HEADERS,
-      }),
+      resolveDynamicModel: async (ctx: any) => {
+        const bareId = stripProviderPrefix(ctx.modelId);
+        const resolved = await resolveDynamicModel(DEFAULT_BASE_URL, bareId);
+
+        if (resolved) {
+          return {
+            ...resolved,
+            id: ctx.modelId,
+            provider: PROVIDER_ID,
+            api: TRANSPORT_API,
+            baseUrl: DEFAULT_BASE_URL,
+            headers: ATTRIBUTION_HEADERS,
+          };
+        }
+
+        // Fallback stub for models not yet in the catalog
+        return {
+          id: ctx.modelId,
+          name: ctx.modelId,
+          provider: PROVIDER_ID,
+          api: TRANSPORT_API,
+          baseUrl: DEFAULT_BASE_URL,
+          reasoning: false,
+          input: ["text"],
+          cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+          contextWindow: 128_000,
+          maxTokens: 8192,
+          headers: ATTRIBUTION_HEADERS,
+        };
+      },
 
       prepareDynamicModel: async (ctx: any) => {
-        const resolved = await resolveDynamicModel(
-          DEFAULT_BASE_URL,
-          ctx.modelId
-        );
-        if (resolved) {
-          ctx.dynamicModelData = { ...resolved, headers: ATTRIBUTION_HEADERS };
+        const bareId = stripProviderPrefix(ctx.modelId);
+        const resolved = await resolveDynamicModel(DEFAULT_BASE_URL, bareId);
+        if (!resolved) {
+          throw new Error(
+            `EUrouter: model "${ctx.modelId}" not found. Check the model ID or verify it is available on EUrouter.`
+          );
         }
+        ctx.dynamicModelData = { ...resolved, headers: ATTRIBUTION_HEADERS };
       },
     });
   },

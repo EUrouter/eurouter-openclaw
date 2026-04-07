@@ -9,6 +9,7 @@ export {
   fetchAllModels,
   resolveDynamicModel,
   clearModelCache,
+  stripProviderPrefix,
   type EurouterModel,
   type OpenClawModel,
 } from "./provider-catalog.js";
