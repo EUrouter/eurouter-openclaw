@@ -31,6 +31,14 @@ describe("published metadata", () => {
     const pkg = JSON.parse(readText("../package.json"));
 
     expect(pkg.openclaw.providers).toEqual(["eurouter"]);
+    expect(pkg.openclaw.compat).toEqual({
+      pluginApi: ">=2026.3.24-beta.2",
+      minGatewayVersion: "2026.3.24-beta.2",
+    });
+    expect(pkg.openclaw.build).toEqual({
+      openclawVersion: "2026.3.24-beta.2",
+      pluginSdkVersion: "2026.3.24-beta.2",
+    });
     expect(pkg.openclaw).not.toHaveProperty("requiredEnvVars");
     expect(pkg.openclaw).not.toHaveProperty("primaryCredential");
   });
