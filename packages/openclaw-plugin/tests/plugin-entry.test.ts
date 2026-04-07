@@ -157,7 +157,7 @@ describe("catalog.run()", () => {
 });
 
 // ---------------------------------------------------------------------------
-// resolveDynamicModel handler — should return real model data (bugs 1.1, 3.2)
+// resolveDynamicModel handler — sync, returns stub or prepared data
 // ---------------------------------------------------------------------------
 describe("resolveDynamicModel handler", () => {
   beforeEach(() => {
@@ -175,21 +175,25 @@ describe("resolveDynamicModel handler", () => {
     vi.restoreAllMocks();
   });
 
-  it("strips the eurouter/ prefix and returns actual model metadata", async () => {
+  it("returns a fallback stub before prepareDynamicModel runs", () => {
     const provider = registerPlugin();
     const ctx = { modelId: "eurouter/gpt-4o" };
-    const result = await provider.resolveDynamicModel(ctx);
-    expect(result.id).toBe("eurouter/gpt-4o"); // OpenClaw expects prefixed ID
+    const result = provider.resolveDynamicModel(ctx);
+    expect(result.id).toBe("eurouter/gpt-4o");
+    expect(result.provider).toBe("eurouter");
+    expect(result.headers).toEqual(ATTRIBUTION_HEADERS);
+  });
+
+  it("returns real model data after prepareDynamicModel populates ctx", async () => {
+    const provider = registerPlugin();
+    const ctx: any = { modelId: "eurouter/gpt-4o" };
+    await provider.prepareDynamicModel(ctx);
+    const result = provider.resolveDynamicModel(ctx);
+    expect(result.id).toBe("eurouter/gpt-4o");
     expect(result.contextWindow).toBe(128000);
     expect(result.maxTokens).toBe(16384);
     expect(result.cost.input).toBe(2.5);
     expect(result.cost.output).toBe(10);
-  });
-
-  it("includes attribution headers", async () => {
-    const provider = registerPlugin();
-    const ctx = { modelId: "eurouter/gpt-4o" };
-    const result = await provider.resolveDynamicModel(ctx);
     expect(result.headers).toEqual(ATTRIBUTION_HEADERS);
   });
 });
