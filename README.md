@@ -10,13 +10,19 @@ Install the plugin in OpenClaw:
 openclaw plugins install @eurouter/openclaw-eurouter
 ```
 
-Set your API key:
+This plugin requires one credential: `EUROUTER_API_KEY`.
+
+Set it with the OpenClaw secrets store:
 
 ```bash
-export EUROUTER_API_KEY=eur_your_key_here
+openclaw secrets set EUROUTER_API_KEY eur_your_key_here
 ```
 
 Then use any EUrouter model in OpenClaw (e.g. `eurouter/gpt-4o`, `eurouter/claude-sonnet-4-6`).
+
+On macOS, avoid shell exports for gateway credentials. The OpenClaw gateway runs
+as a LaunchAgent and does not inherit environment variables from your
+interactive shell.
 
 ## Development
 

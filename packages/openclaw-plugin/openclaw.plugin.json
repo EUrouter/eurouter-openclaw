@@ -15,6 +15,7 @@
       "choiceHint": "Get your API key at https://eurouter.ai (starts with eur_)",
       "groupId": "eurouter",
       "groupLabel": "EUrouter",
+      "groupHint": "API key",
       "optionKey": "eurouterApiKey",
       "cliFlag": "--eurouter-api-key",
       "cliOption": "--eurouter-api-key <key>",

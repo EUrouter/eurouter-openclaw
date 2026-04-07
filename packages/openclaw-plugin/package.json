@@ -1,6 +1,6 @@
 {
   "name": "@eurouter/openclaw-eurouter",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "EUrouter provider plugin for OpenClaw — EU-hosted, GDPR-compliant LLM routing",
   "type": "module",
   "main": "./dist/index.js",
@@ -29,10 +29,12 @@
     "extensions": ["./dist/index.js"],
     "providers": ["eurouter"],
     "compat": {
-      "pluginApi": ">=2026.3.24-beta.2"
+      "pluginApi": ">=2026.3.24-beta.2",
+      "minGatewayVersion": "2026.3.24-beta.2"
     },
     "build": {
-      "openclawVersion": "2026.3.24-beta.2"
+      "openclawVersion": "2026.3.24-beta.2",
+      "pluginSdkVersion": "2026.3.24-beta.2"
     }
   },
   "peerDependencies": {
