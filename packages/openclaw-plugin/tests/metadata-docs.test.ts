@@ -30,6 +30,10 @@ describe("published metadata", () => {
   it("keeps package metadata free of unsupported credential fields", () => {
     const pkg = JSON.parse(readText("../package.json"));
 
+    expect(pkg.displayName).toBe("EUrouter");
+    expect(pkg.homepage).toBe(
+      "https://github.com/EUrouter/eurouter-openclaw/tree/main/packages/openclaw-plugin"
+    );
     expect(pkg.openclaw.providers).toEqual(["eurouter"]);
     expect(pkg.openclaw.compat).toEqual({
       pluginApi: ">=2026.3.24-beta.2",
@@ -41,6 +45,25 @@ describe("published metadata", () => {
     });
     expect(pkg.openclaw).not.toHaveProperty("requiredEnvVars");
     expect(pkg.openclaw).not.toHaveProperty("primaryCredential");
+  });
+
+  it("ships a publish-time SKILL.md that declares the required credential", () => {
+    const skill = readText("../SKILL.md");
+
+    expect(skill).toContain("env: [EUROUTER_API_KEY]");
+    expect(skill).toContain("primaryEnv: EUROUTER_API_KEY");
+    expect(skill).toContain("openclaw secrets set EUROUTER_API_KEY");
+    expect(skill).toContain("https://api.eurouter.ai/api/v1");
+  });
+
+  it("keeps ClawHub publishes limited to runtime-facing files", () => {
+    const ignore = readText("../.clawhubignore");
+
+    expect(ignore).toContain("src/");
+    expect(ignore).toContain("tests/");
+    expect(ignore).toContain("scripts/");
+    expect(ignore).toContain("package-lock.json");
+    expect(ignore).toContain("*.tgz");
   });
 });
 
