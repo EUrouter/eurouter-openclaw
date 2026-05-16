@@ -27,6 +27,20 @@ describe("published metadata", () => {
     expect(manifest).not.toHaveProperty("primaryCredential");
   });
 
+  it("declares setup.providers[].envVars so provider env-var lookup works without deprecated metadata", () => {
+    const manifest = JSON.parse(readText("../openclaw.plugin.json"));
+
+    expect(manifest.setup).toBeDefined();
+    expect(manifest.setup.providers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "eurouter",
+          envVars: ["EUROUTER_API_KEY"],
+        }),
+      ])
+    );
+  });
+
   it("keeps package metadata free of unsupported credential fields", () => {
     const pkg = JSON.parse(readText("../package.json"));
 
