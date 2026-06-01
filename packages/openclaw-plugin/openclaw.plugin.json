@@ -3,6 +3,14 @@
   "name": "EUrouter",
   "description": "EU-hosted, GDPR-compliant LLM routing via EUrouter",
   "providers": ["eurouter"],
+  "setup": {
+    "providers": [
+      {
+        "id": "eurouter",
+        "envVars": ["EUROUTER_API_KEY"]
+      }
+    ]
+  },
   "providerAuthEnvVars": {
     "eurouter": ["EUROUTER_API_KEY"]
   },
